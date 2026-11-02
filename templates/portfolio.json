@@ -7,6 +7,11 @@
   "contact": [
     {
       "email": "abdalmoniemalhifnawy@gmail.com",
+      "phone": "+47 972 861 59",
+      "location": "Trondheim, Norway"
+    },
+    {
+      "email": "abdalmoniemalhifnawy@gmail.com",
       "phone": "+48 519 861 386",
       "location": "Mierzyn, Poland"
     },
@@ -16,7 +21,7 @@
       "location": "Cairo, Egypt"
     }
   ],
-  "summary": "I’m a Software Engineer with over 8 years of experience in Software Engineering, I specialize in a broad range of areas including Embedded Systems, Linux, Robotics, Android Development, Game Development, Database Administration, System Administration, CI/CD Automation, and Diagnostic Systems. I thrive in challenging environments, actively collaborating with cross-functional teams to optimize workfows and improve system reliability.",
+  "summary": "I’m a Software Engineer with over <b><i>9 years</i></b> of experience in Software Engineering, I specialize in a broad range of areas including Embedded Systems, Linux, Robotics, Android Development, Game Development, Database Administration, System Administration, CI/CD Automation, Diagnostic Systems, Wireless Connectivity Verification, Bluetooth Low Energy, and Zephyr. I thrive in challenging environments, actively collaborating with cross-functional teams to optimize workfows and improve system reliability.",
   "base_url": "localhost:8000",
   "social_links": [
     {
@@ -32,11 +37,36 @@
   ],
   "work_experience": [
     {
+      "company": "Nordic Semiconductor",
+      "position": "R&D Engineer",
+      "url": "https://www.nordicsemi.com",
+      "start_date": "<b><i>Jul/2026</i></b>",
+      "end_date": "<b><i>Present</i></b>",
+      "summary": "Nordic Semiconductor is a global leader in low power wireless connectivity solutions, providing the essential platform and wireless technologies that connect the world’s IoT devices. Nordic delivers world-class hardware, embedded software, development tools, power management, world-class support, and cloud lifecycle services - all simplifying development for developers to build reliable, scalable, and future-proof connected products faster.",
+      "highlights": [
+        "Design, implement, and debug automated <b><i>BLE</i></b> system tests in <b><i>CTF</i></b> (Common Test Framework), a pytest-based stack for multi-board lab verification.",
+        "Own and extend centralized test and lab configuration, defining target-device and test-rig pairings and platform matrices for regression and release qualification.",
+        "Develop and maintain Jenkins declarative pipelines for large BLE system-test jobs, including staged builds, filters, and multi-SDK manifest workflows.",
+        "Drive platform migration as legacy short-range parts leave mainline: retarget radio and related verification suites to <b><i>nRF54</i></b> Series and <b><i>nRF53</i></b> peers while keeping CI schedulable.",
+        "Port and debug <b><i>Zephyr</i></b> test applications for radio timing validation, board overlays, Kconfig, devicetree, and embedded C using RADIO, timers, and cross-domain event routing on newer SoCs.",
+        "Triage CI and hardware lab failures (build, flash, link, runtime assertions) and iterate fixes until pipelines and on-rig smoke tests pass.",
+        "Integrate <b><i>PPK2</i></b>-based (Power Profiler Kit) target power measurement into the <b><i>CTF</i></b> harness: flash measurement firmware before sampling, restore release firmware afterward, and wire configuration through board abstraction layers.",
+        "Implement <b><i>USB DFU</i></b> (Device Firmware Upgrade) programming flows for bench equipment firmware using standard Nordic command-line tooling and environment-driven artifact paths.",
+        "Refactor verification Python modules for <b><i>PPK2</i></b> board control, serial port selection, and clearer harness integration for power tests.",
+        "Contribute to <a href=\"https://github.com/nrfconnect/sdk-nrf\"><b><i>sdk-nrf</i></b></a> within team-owned scope: remove deprecated board targets from Twister and sample metadata for <b><i>BLE</i></b> samples exercised in automated <b><i>BLE</i></b> sample verification.",
+        "Update changelog and release-note entries so sample and platform removals are documented for downstream developers.",
+        "Coordinate west manifest and revision-lock behavior so CI can pin SDK snapshots for new chip families without breaking default manifest jobs.",
+        "Split and scope CI stages by SDK manifest so host-power and similar suites run against the correct platform filters and toolchains.",
+        "Build <b><i>ppk_fw_version</i></b>, a <b><i>Rust CLI</i></b> that reads PPK2 firmware version over USB/serial, with structured CLI parsing, shell completions, and colored user output.",
+        "Collaborate with firmware, radio, and doc stakeholders on sample ownership boundaries and verification coverage when retiring older hardware from build and test matrices."
+      ]
+    },
+    {
       "company": "GlobalLogic Poland",
       "position": "Senior Software Engineer",
       "url": "https://globallogic.com",
-      "start_date": "Mar/2023",
-      "end_date": "Present",
+      "start_date": "<b><i>Mar/2023</i></b>",
+      "end_date": "<b><i>Jun/2025</i></b>",
       "summary": "GlobalLogic is a digital services company providing software product design and  development services. It is an independent subsidiary of Hitachi Ltd.",
       "highlights": [
         "Worked with Jenkins to automate CI/CD pipelines, manage build processes, and integrate with various tools for testing and deployment.",
@@ -63,8 +93,8 @@
       "company": "Vehiclevo Egypt",
       "position": "Senior Embedded Software Engineer",
       "url": "https://vehiclevo.de",
-      "start_date": "May/2022",
-      "end_date": "Mar/2023",
+      "start_date": "<b><i>May/2022</i></b>",
+      "end_date": "<b><i>Mar/2023</i></b>",
       "summary": "Vehiclevo is a German automotive software company founded in 2016, specializing in intelligent software architectures for ECUs, with a focus on EVs, infotainment, and autonomous driving. It operates globally, including a development center in Egypt, and is a recognized AUTOSAR partner.",
       "highlights": [
         "Creating simulation nodes and panels using Vector CANoe and programming them with CAPL",
@@ -77,8 +107,8 @@
       "company": "Valeo",
       "position": "Embedded Software Engineer",
       "url": "https://valeo.com",
-      "start_date": "Oct/2018",
-      "end_date": "Apr/2022",
+      "start_date": "<b><i>Oct/2018</i></b>",
+      "end_date": "<b><i>Apr/2022</i></b>",
       "summary": "Valeo is an automotive supplier and partner to automakers worldwide. It is a global leader in the design, production, and sale of components, integrated systems, and modules for the automotive industry.",
       "highlights": [
         "Creating simulation nodes and panels using Vector CANoe and programming them with CAPL",
@@ -95,15 +125,15 @@
       "company": "Valeo",
       "position": "Embedded Software Intern",
       "url": "https://valeo.com",
-      "start_date": "Mar/2018",
-      "end_date": "Jul/2022"
+      "start_date": "<b><i>Mar/2018</i></b>",
+      "end_date": "<b><i>Jul/2022</i></b>"
     },
     {
       "company": "KAN",
       "position": "Senior Software Engineer",
       "url": "https://kan4u.com",
-      "start_date": "Dec/2017",
-      "end_date": "Feb/2018",
+      "start_date": "<b><i>Dec/2017</i></b>",
+      "end_date": "<b><i>Feb/2018</i></b>",
       "highlights": [
         "Developing Android Apps for various clients, managing SQL databases and creating backend servers using Java2EE and JSP"
       ]
@@ -112,8 +142,8 @@
       "company": "Hive Studio",
       "position": "Game Developer",
       "url": "https://hivestudio.net",
-      "start_date": "Dec/2017",
-      "end_date": "Feb/2018",
+      "start_date": "<b><i>Dec/2017</i></b>",
+      "end_date": "<b><i>Feb/2018</i></b>",
       "highlights": [
         "Developing various VR and AR games for various advertising purposes, using Unity3D and C#"
       ]
@@ -122,8 +152,8 @@
       "company": "AL Hadeya For Arabic Software",
       "position": "Android Developer",
       "url": "https://www.hadeya.net/",
-      "start_date": "Dec/2017",
-      "end_date": "Feb/2018",
+      "start_date": "<b><i>Dec/2017</i></b>",
+      "end_date": "<b><i>Feb/2018</i></b>",
       "highlights": [
         "Developing Android Apps for various clients, managing SQL databases and creating backend servers using Java2EE and JSP"
       ]
@@ -132,23 +162,23 @@
   "education": [
     {
       "institution": "Helwan University",
-      "location": "Helwan, Egypt",
+      "location": "<b><i>Helwan, Egypt</i></b>",
       "url": "https://www.helwan.edu.eg",
       "degrees": [
         "Bachelor of Engineering"
       ],
-      "enrollment_date": "Sep/2012",
-      "graduation_date": "Sep/2017"
+      "enrollment_date": "<b><i>Sep/2012</i></b>",
+      "graduation_date": "<b><i>Sep/2017</i></b>"
     },
     {
       "institution": "California Polytechnic State University",
-      "location": "California, USA",
+      "location": "<b><i>California, USA</i></b>",
       "url": "https://www.calpoly.edu",
       "degrees": [
         "Training in Robotics"
       ],
-      "enrollment_date": "Jul/2016",
-      "graduation_date": "Aug/2016"
+      "enrollment_date": "<b><i>Jul/2016</i></b>",
+      "graduation_date": "<b><i>Aug/2016</i></b>"
     }
   ],
   "projects": [
@@ -305,6 +335,14 @@
       "proficiency": 80
     },
     {
+      "name": "Zephyr",
+      "proficiency": 30
+    },
+    {
+      "name": "Bluetooth LE",
+      "proficiency": 30
+    },
+    {
       "name": "Programming",
       "proficiency": 80
     },
@@ -346,7 +384,7 @@
     },
     {
       "name": "Rust",
-      "proficiency": 40
+      "proficiency": 70
     },
     {
       "name": "JavaScript",
@@ -381,33 +419,33 @@
     {
       "organization": "Flickers",
       "position": "HR Member",
-      "start_date": "Sep/2015",
-      "end_date": "Aug/2015",
+      "start_date": "<b><i>Sep/2015</i></b>",
+      "end_date": "<b><i>Aug/2015</i></b>",
       "summary": "Flickers is a student organization that aims to bridge the gab between school and job market in Egypt for the students of variant majors"
     },
     {
       "organization": "Flickers",
       "position": "HR Executive Assistant",
-      "start_date": "Aug/2015",
-      "end_date": "Sep/2017",
+      "start_date": "<b><i>Aug/2015</i></b>",
+      "end_date": "<b><i>Sep/2017</i></b>",
       "summary": "Flickers is a student organization that aims to bridge the gab between school and job market in Egypt for the students of variant majors"
     },
     {
       "organization": "NASA Space Apps - Cairo",
       "position": "Technical Mentor",
-      "start_date": "Oct/2019",
-      "end_date": "Oct/2019",
+      "start_date": "<b><i>Oct/2019</i></b>",
+      "end_date": "<b><i>Oct/2019</i></b>",
       "summary": "Participated as a mobile apps and ROS developers’ mentor"
     }
   ],
   "languages": [
     {
       "name": "Arabic",
-      "fluency": "Native speaker"
+      "fluency": "Native"
     },
     {
       "name": "English",
-      "fluency": "Professional Working Proficiency"
+      "fluency": "Professional"
     }
   ],
   "interests": [

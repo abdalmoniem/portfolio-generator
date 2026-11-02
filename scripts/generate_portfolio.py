@@ -1,3 +1,4 @@
+# ruff: noqa: UP045
 """
 Generate an HTML page from a Jinja template and a JSON data file.
 
@@ -25,17 +26,31 @@ Example usage:
 
 """
 
+import builtins
+import logging
 import os
 import shutil
-import pdfkit
-import pyjson5
-import builtins
-from pathlib import Path
-from dacite import from_dict
-from datetime import datetime
-from typing import List, Optional
+import sys
+from collections.abc import Callable
 from dataclasses import dataclass
+from datetime import datetime
+from pathlib import Path
+from typing import Optional
+
+import json5
+from dacite import from_dict
 from jinja2 import Environment, FileSystemLoader
+from rich.logging import RichHandler
+from weasyprint import HTML
+
+logging.basicConfig(
+    level=logging.DEBUG,
+    format="%(message)s",
+    datefmt="[%a, %d/%b/%Y - %I:%M:%S %p]",
+    handlers=[RichHandler(rich_tracebacks=True)],
+)
+
+logger = logging.getLogger(__name__)
 
 
 @dataclass
@@ -90,7 +105,7 @@ class WorkExperience:
     start_date: str
     end_date: str
     summary: Optional[str]
-    highlights: Optional[List[str]]
+    highlights: Optional[list[str]]
 
 
 @dataclass
@@ -112,8 +127,8 @@ class Education:
     institution: str
     location: str
     url: Optional[str]
-    degrees: List[str]
-    honors: Optional[List[str]]
+    degrees: list[str]
+    honors: Optional[list[str]]
     gpa_cumulative: Optional[str]
     gpa_major: Optional[str]
     enrollment_date: str
@@ -149,9 +164,9 @@ class Project:
     title: str
     summary: Optional[str]
     url: Optional[str]
-    highlights: Optional[List[str]]
-    images: Optional[List[ProjectImage]]
-    tools: Optional[List[str]]
+    highlights: Optional[list[str]]
+    images: Optional[list[ProjectImage]]
+    tools: Optional[list[str]]
 
 
 @dataclass
@@ -189,7 +204,7 @@ class VolunteerExperience:
     start_date: str
     end_date: str
     summary: Optional[str]
-    highlights: Optional[List[str]]
+    highlights: Optional[list[str]]
 
 
 @dataclass
@@ -225,12 +240,12 @@ class Interest:
     Attributes:
         name (str): Name of the interest
         summary (str): Summary of the interest
-        images (List[InterestImage]): List of images related to the interest
+        images (list[InterestImage]): List of images related to the interest
     """
 
     name: str
     summary: Optional[str]
-    images: Optional[List[InterestImage]]
+    images: Optional[list[InterestImage]]
 
 
 @dataclass
@@ -241,17 +256,17 @@ class Portfolio:
         name (str): Name of the portfolio
         label (str): Label of the portfolio
         image_path (str): Path to the portfolio image
-        contact (List[ContactInfo]): List of contact information
+        contact (list[ContactInfo]): List of contact information
         summary (str): Summary of the portfolio
         base_url (str): Base URL of the portfolio
-        social_links (List[SocialLink]): List of social links
-        work_experience (List[WorkExperience]): List of work experiences
-        projects (List[Project]): List of projects
-        volunteer_experience (List[VolunteerExperience]): List of volunteer experiences
-        education (List[Education]): List of education records
-        skills (List[Skill]): List of skills
-        interests (Optional[List[Interest]]): List of interests
-        languages (Optional[List[Language]]): List of languages
+        social_links (list[SocialLink]): List of social links
+        work_experience (list[WorkExperience]): List of work experiences
+        projects (list[Project]): List of projects
+        volunteer_experience (list[VolunteerExperience]): List of volunteer experiences
+        education (list[Education]): List of education records
+        skills (list[Skill]): List of skills
+        interests (Optional[list[Interest]]): List of interests
+        languages (Optional[list[Language]]): List of languages
         current_year (Optional[int]): The current year
     """
 
@@ -260,17 +275,17 @@ class Portfolio:
     last_name: str
     label: str
     image_path: str
-    contact: List[ContactInfo]
+    contact: list[ContactInfo]
     summary: str
     base_url: str
-    social_links: List[SocialLink]
-    work_experience: List[WorkExperience]
-    projects: List[Project]
-    volunteer_experience: List[VolunteerExperience]
-    education: List[Education]
-    skills: List[Skill]
-    interests: Optional[List[Interest]]
-    languages: Optional[List[Language]]
+    social_links: list[SocialLink]
+    work_experience: list[WorkExperience]
+    projects: list[Project]
+    volunteer_experience: list[VolunteerExperience]
+    education: list[Education]
+    skills: list[Skill]
+    interests: Optional[list[Interest]]
+    languages: Optional[list[Language]]
     current_year: Optional[int]
 
 
@@ -292,8 +307,9 @@ def delete_dir_contents(path: Path) -> None:
                 os.unlink(file_path)  # remove file or symlink
             elif os.path.isdir(file_path):
                 shutil.rmtree(file_path)  # remove directory and its contents
-        except Exception as e:
-            print(f"Failed to delete {file_path}. Reason: {e}")
+        except Exception as e:  # noqa: BLE001
+            logger.error(f"Failed to delete {file_path}. Reason: {e}")
+            sys.exit(1)
 
 
 def copy_files(src: Path, dest: Path, pattern: str = "*.*") -> None:
@@ -319,7 +335,21 @@ def copy_files(src: Path, dest: Path, pattern: str = "*.*") -> None:
         with file.open("rb") as source, target_path.open("wb") as target:
             content = source.read()
             target.write(content)
-            # print(f"Copied {file.name} to {target_path.name}")
+            logger.info(f"Copied {file.name} to {target_path.name}")
+
+
+def write_file(file_path: Path, file_content: str) -> None:
+    logger.info(f"Generating {file_path.name} files...")
+    with file_path.open("w", encoding="utf-8") as file_handle:
+        written = file_handle.write(file_content)
+        check_status(file_path.name, lambda: written == len(file_content))
+
+
+def check_status(file_name: str, predicate: Callable[[], bool]) -> None:
+    if predicate():
+        logger.info(f"{file_name} generated successfully!")
+    else:
+        logger.error(f"Failed to generate {file_name}.")
 
 
 def main() -> None:
@@ -332,153 +362,137 @@ def main() -> None:
     :return: None
     """
 
-    SCRIPT_DIR = Path(__file__).resolve().parent
-    TEMPLATES_DIR = SCRIPT_DIR / "../templates"
-    GENERATED_DIR = SCRIPT_DIR / "../generated"
-    portfolio_path = TEMPLATES_DIR / "portfolio.json"
+    try:
+        SCRIPT_DIR = Path(__file__).resolve().parent
+        TEMPLATES_DIR = SCRIPT_DIR / "../templates"
+        GENERATED_DIR = SCRIPT_DIR / "../generated"
+        portfolio_path = TEMPLATES_DIR / "portfolio.json"
 
-    # Ensure the generated directory exists
-    if not GENERATED_DIR.exists():
-        print(f"Creating directory: {GENERATED_DIR}")
-        GENERATED_DIR.mkdir(parents=True, exist_ok=True)
-    else:
-        print(f"Clearing directory: {GENERATED_DIR}")
-        delete_dir_contents(GENERATED_DIR)
-
-    # Load JSON data
-    with portfolio_path.open(encoding="utf-8") as file_handle:
-        raw_text = file_handle.read()
-        raw_data = pyjson5.loads(raw_text)
-        portfolio = from_dict(data_class=Portfolio, data=raw_data)
-
-    portfolio.current_year = datetime.now().year
-
-    if portfolio.social_links:
-        for link in portfolio.social_links:
-            if link.svg_path:
-                with (TEMPLATES_DIR / link.svg_path).open(encoding="utf-8") as svg_file:
-                    link.svg_data = svg_file.read()
-
-    extra_fields = {}
-
-    for key, value in raw_data.items():
-        if not hasattr(portfolio, key):
-            setattr(portfolio, key, value)
-            extra_fields[key] = getattr(portfolio, key)
-
-    index_template_path = TEMPLATES_DIR / "index_template.html"
-    resume_template_path = TEMPLATES_DIR / "resume_template.html"
-    resume_pdf_template_path = TEMPLATES_DIR / "resume_pdf_template.html"
-    index_path = GENERATED_DIR / "index.html"
-    resume_path = GENERATED_DIR / "resume.html"
-    resume_pdf_path = GENERATED_DIR / "resume_pdf.html"
-    pdf_output_path = (
-        GENERATED_DIR / f"{portfolio.first_name} {portfolio.last_name} Résumé.pdf"
-    )
-
-    global_builtins = {name: value for name, value in (builtins.__dict__).items()}
-
-    # Set up Jinja environment
-    env = Environment(loader=FileSystemLoader(TEMPLATES_DIR), autoescape=True)
-    env.globals.update(**global_builtins)
-
-    index_template = env.get_template(index_template_path.name)
-    resume_template = env.get_template(resume_template_path.name)
-    resume_pdf_template = env.get_template(resume_pdf_template_path.name)
-
-    # Render the template with the data
-    html_output = index_template.render(portfolio=portfolio, extra_fields=extra_fields)
-    resume_output = resume_template.render(
-        portfolio=portfolio, extra_fields=extra_fields
-    )
-    resume_pdf_output = resume_pdf_template.render(
-        portfolio=portfolio, extra_fields=extra_fields
-    )
-
-    print("Copying CSS files...")
-    css_dir = TEMPLATES_DIR / "css"
-    generated_css_dir = SCRIPT_DIR / "../generated/css"
-    generated_css_dir.mkdir(parents=True, exist_ok=True)
-
-    copy_files(
-        src=css_dir,
-        dest=generated_css_dir,
-        pattern="*.css",
-    )
-
-    print("Copying images...")
-    images_dir = TEMPLATES_DIR / "img"
-    favicon_path = TEMPLATES_DIR / "img/favicon.ico"
-    generated_images_dir = SCRIPT_DIR / "../generated/img"
-
-    copy_files(
-        src=images_dir,
-        dest=generated_images_dir,
-        pattern="*.*",
-    )
-
-    copy_files(
-        src=images_dir,
-        dest=GENERATED_DIR,
-        pattern=favicon_path.name,
-    )
-
-    print("Copying JS files...")
-    js_dir = TEMPLATES_DIR / "js"
-    generated_js_dir = SCRIPT_DIR / "../generated/js"
-
-    copy_files(
-        src=js_dir,
-        dest=generated_js_dir,
-        pattern="*.js",
-    )
-
-    print(f"Generating {index_path.name} files...")
-    # Write the output to an HTML file
-    with index_path.open("w", encoding="utf-8") as file_handle:
-        written = file_handle.write(html_output)
-
-        if written == len(html_output):
-            print(f"{index_path.name} generated successfully!!")
+        # Ensure the generated directory exists
+        if not GENERATED_DIR.exists():
+            logger.info(f"Creating directory: {GENERATED_DIR}")
+            GENERATED_DIR.mkdir(parents=True, exist_ok=True)
         else:
-            print(f"Failed to generate {index_path.name}.")
+            logger.info(f"Clearing directory: {GENERATED_DIR}")
+            delete_dir_contents(GENERATED_DIR)
 
-    print(f"Generating {resume_path.name} files...")
-    with resume_path.open("w", encoding="utf-8") as file_handle:
-        written = file_handle.write(resume_output)
+        # Load JSON data
+        with portfolio_path.open(encoding="utf-8") as file_handle:
+            raw_text = file_handle.read()
+            raw_data = json5.loads(raw_text)
+            portfolio = from_dict(data_class=Portfolio, data=raw_data)
 
-        if written == len(resume_output):
-            print(f"{resume_path.name} generated successfully!!")
-        else:
-            print(f"Failed to generate {resume_path.name}.")
+        portfolio.current_year = datetime.now().year
 
-    print(f"Generating {resume_pdf_path.name} files...")
-    with resume_pdf_path.open("w", encoding="utf-8") as file_handle:
-        written = file_handle.write(resume_pdf_output)
+        if portfolio.social_links:
+            for link in portfolio.social_links:
+                if link.svg_path:
+                    with (TEMPLATES_DIR / link.svg_path).open(
+                        encoding="utf-8"
+                    ) as svg_file:
+                        link.svg_data = svg_file.read()
 
-        if written == len(resume_pdf_output):
-            print(f"{resume_pdf_path.name} generated successfully!!")
-        else:
-            print(f"Failed to generate {resume_pdf_path.name}.")
+        extra_fields = {}
 
-    # Convert HTML to PDF
-    print(f"Generating {pdf_output_path.name} file...")
-    status = pdfkit.from_file(
-        input=str(resume_pdf_path),
-        output_path=str(pdf_output_path),
-        verbose=True,
-        options={
-            "enable-local-file-access": "",  # Required for local CSS/images
-            "load-error-handling": "ignore",  # Suppress errors on loading
-            "encoding": "UTF-8",
-            "disable-smart-shrinking": "",
-        },
-    )
+        for key, value in raw_data.items():
+            if not hasattr(portfolio, key):
+                setattr(portfolio, key, value)
+                extra_fields[key] = getattr(portfolio, key)
 
-    if status:
-        print(f"{pdf_output_path.name} generated successfully!!")
-    else:
-        print(f"Failed to generate {pdf_output_path.name}.")
+        index_template_path = TEMPLATES_DIR / "index_template.html"
+        resume_template_path = TEMPLATES_DIR / "resume_template.html"
+        resume_pdf_template_path = TEMPLATES_DIR / "resume_pdf_template.html"
+        index_path = GENERATED_DIR / "index.html"
+        resume_path = GENERATED_DIR / "resume.html"
+        resume_pdf_path = GENERATED_DIR / "resume_pdf.html"
+        pdf_output_paths = [
+            GENERATED_DIR / "resume.pdf",
+            GENERATED_DIR / f"{portfolio.first_name} {portfolio.last_name} Résumé.pdf",
+        ]
+
+        global_builtins = {name: value for name, value in (builtins.__dict__).items()}
+
+        # Set up Jinja environment
+        env = Environment(loader=FileSystemLoader(TEMPLATES_DIR), autoescape=False)
+        env.globals.update(**global_builtins)
+
+        index_template = env.get_template(index_template_path.name)
+        resume_template = env.get_template(resume_template_path.name)
+        resume_pdf_template = env.get_template(resume_pdf_template_path.name)
+
+        # Render the template with the data
+        html_output = index_template.render(
+            portfolio=portfolio, extra_fields=extra_fields
+        )
+        resume_output = resume_template.render(
+            portfolio=portfolio, extra_fields=extra_fields
+        )
+        resume_pdf_output = resume_pdf_template.render(
+            portfolio=portfolio, extra_fields=extra_fields
+        )
+
+        logger.info("Copying CSS files...")
+        css_dir = TEMPLATES_DIR / "css"
+        generated_css_dir = SCRIPT_DIR / "../generated/css"
+        generated_css_dir.mkdir(parents=True, exist_ok=True)
+
+        copy_files(
+            src=css_dir,
+            dest=generated_css_dir,
+            pattern="*.css",
+        )
+
+        logger.info("Copying font files...")
+        fonts_dir = TEMPLATES_DIR / "fonts"
+        generated_fonts_dir = SCRIPT_DIR / "../generated/fonts"
+        copy_files(
+            src=fonts_dir,
+            dest=generated_fonts_dir,
+            pattern="*.ttf",
+        )
+
+        logger.info("Copying images...")
+        images_dir = TEMPLATES_DIR / "img"
+        favicon_path = TEMPLATES_DIR / "img/favicon.ico"
+        generated_images_dir = SCRIPT_DIR / "../generated/img"
+
+        copy_files(
+            src=images_dir,
+            dest=generated_images_dir,
+            pattern="*.*",
+        )
+
+        copy_files(
+            src=images_dir,
+            dest=GENERATED_DIR,
+            pattern=favicon_path.name,
+        )
+
+        logger.info("Copying JS files...")
+        js_dir = TEMPLATES_DIR / "js"
+        generated_js_dir = SCRIPT_DIR / "../generated/js"
+
+        copy_files(
+            src=js_dir,
+            dest=generated_js_dir,
+            pattern="*.js",
+        )
+
+        # Write the output to an HTML file
+        write_file(index_path, html_output)
+        write_file(resume_path, resume_output)
+        write_file(resume_pdf_path, resume_pdf_output)
+
+        # Convert HTML to PDF with WeasyPrint
+        for pdf_output_path in pdf_output_paths:
+            logger.info(f"Generating {pdf_output_path.name} file...")
+
+            HTML(filename=str(resume_pdf_path), media_type="screen").write_pdf(
+                str(pdf_output_path)
+            )
+            check_status(pdf_output_path.name, lambda: True)
+    except KeyboardInterrupt:
+        logger.warning("portfolio generation interrupted!")
 
 
 if __name__ == "__main__":

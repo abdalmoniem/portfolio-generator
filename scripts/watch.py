@@ -8,32 +8,47 @@ Example usage:
 
 """
 
+import logging
+import sys
 from pathlib import Path
 from subprocess import run
-from typing import Optional
-from livereload import Server
 from sys import executable as python_executable
+from typing import Optional
 
-HOST = "localhost"
+from livereload import Server
+from rich.logging import RichHandler
+
 PORT = 8000
+HOST = "localhost"
 SCRIPT_DIR = Path(__file__).resolve().parent
 TEMPLATES_DIR = SCRIPT_DIR / "../templates"
 SCRIPT_TO_RUN = SCRIPT_DIR / "generate_portfolio.py"
 
 watched_paths = [
     SCRIPT_TO_RUN,
+    TEMPLATES_DIR / "js",
+    TEMPLATES_DIR / "css",
+    TEMPLATES_DIR / "img",
+    TEMPLATES_DIR / "fonts",
+    TEMPLATES_DIR / "favicon.ico",
     TEMPLATES_DIR / "portfolio.json",
     TEMPLATES_DIR / "index_template.html",
     TEMPLATES_DIR / "resume_template.html",
     TEMPLATES_DIR / "resume_pdf_template.html",
-    TEMPLATES_DIR / "favicon.ico",
-    TEMPLATES_DIR / "css",
-    TEMPLATES_DIR / "img",
-    TEMPLATES_DIR / "js",
 ]
 
 
-def run_script(changed_path: Optional[Path] | Optional[list[str]] = None) -> None:
+logging.basicConfig(
+    level=logging.DEBUG,
+    format="%(message)s",
+    datefmt="[%a, %d/%b/%Y - %I:%M:%S %p]",
+    handlers=[RichHandler(rich_tracebacks=True)],
+)
+
+logger = logging.getLogger(__name__)
+
+
+def run_script(changed_path: Optional[Path] | Optional[list[str]] = None) -> None:  # noqa: PYI016, UP045
     """
     Executes a specified script and handles changes to files.
 
@@ -52,33 +67,37 @@ def run_script(changed_path: Optional[Path] | Optional[list[str]] = None) -> Non
             file change is detected.
     """
 
-    if isinstance(changed_path, list):
-        for file in changed_path:
-            print(f"Detected change in {file}!")
-    elif isinstance(changed_path, Path):
-        print(f"Detected change in {changed_path}!")
+    try:
+        if isinstance(changed_path, list):
+            for file in changed_path:
+                logger.info(f"Detected change in {file}!")
+        elif isinstance(changed_path, Path):
+            logger.info(f"Detected change in {changed_path}!")
 
-    print(f"Running {SCRIPT_TO_RUN}...")
-    run([python_executable, SCRIPT_TO_RUN], check=True)
-    print(f"Script {SCRIPT_TO_RUN} finished!")
+        logger.info(f"Running {SCRIPT_TO_RUN}...")
+        run([python_executable, SCRIPT_TO_RUN], check=True)
+        logger.info(f"Script {SCRIPT_TO_RUN} finished!")
 
-    if changed_path:
-        if isinstance(changed_path, Path) and changed_path.suffix == ".html":
-            new_name = changed_path.name.replace("_template", "")
-            served_file = changed_path.with_name(new_name)
+        if changed_path:
+            if isinstance(changed_path, Path) and changed_path.suffix == ".html":
+                new_name = changed_path.name.replace("_template", "")
+                served_file = changed_path.with_name(new_name)
 
-            print(f"Reloading {served_file}...")
-            print("Reloading browser...")
+                logger.info(f"Reloading {served_file}...")
+                logger.info("Reloading browser...")
 
-        elif isinstance(changed_path, list):
-            for path in changed_path:
-                path = Path(path)
-                if path.suffix == ".html":
-                    new_name = path.name.replace("_template", "")
-                    served_file = path.with_name(new_name)
+            elif isinstance(changed_path, list):
+                for path in changed_path:
+                    path = Path(path)
+                    if path.suffix == ".html":
+                        new_name = path.name.replace("_template", "")
+                        served_file = path.with_name(new_name)
 
-                    print(f"Reloading {served_file}...")
-                    print("Reloading browser...")
+                        logger.info(f"Reloading {served_file}...")
+                        logger.info("Reloading browser...")
+    except KeyboardInterrupt:
+        logger.warning(f"{SCRIPT_TO_RUN} execution interrupted!")
+        sys.exit(1)
 
 
 def main() -> None:
@@ -120,7 +139,7 @@ def main() -> None:
         )
 
     # Serve current directory (so output.html is served)
-    print(f"Serving on http://{HOST}:{PORT} (LiveReload enabled)")
+    logger.info(f"Serving on http://{HOST}:{PORT} (LiveReload enabled)")
     server.serve(root=SCRIPT_DIR / "../generated", port=PORT, host=HOST)
 
 

@@ -25,17 +25,11 @@
   <!-- Open Graph Tags: Provides an alternative text for the image to improve accessibility. -->
   <meta property="og:image:alt" content="{{ first_name }} {{ last_name }} Profile Image">
 
-  <!-- Preconnect for Google Fonts -->
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-
-  <!-- Custom Font -->
-  <link
-    href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&family=Nunito:ital,wght@0,200..1000;1,200..1000&display=swap"
-    rel="stylesheet">
+  <!-- Custom Fonts -->
+  <link href="css/google_fonts_css2.css" rel="stylesheet">
 
   <!-- Stylesheet -->
-   
+
   <link rel="stylesheet" href="css/modern_normalize.css" />
   <link rel="stylesheet" href="css/html5bp.css">
   <link rel="stylesheet" href="css/main.css">
@@ -59,7 +53,8 @@
     <div class="container">
       <div class="header-top flex-responsive">
         <div class="header-info">
-          <h1>{{ portfolio.first_name }} {% if portfolio.middle_name %} {{ portfolio.middle_name }} {% endif %} {{ portfolio.last_name }}</h1>
+          <h1>{{ portfolio.first_name }} {% if portfolio.middle_name %} {{ portfolio.middle_name }} {% endif %} {{
+            portfolio.last_name }}</h1>
           {% if portfolio.contact %}
           {% for info in contact %}
           {% if info.email or info.phone or info.location %}

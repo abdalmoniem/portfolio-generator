@@ -2,326 +2,320 @@
 <html lang="en">
 
 <head>
-   <meta charset="utf-8">
-   <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
 
-   <!-- Site Info -->
-   <title>{{ portfolio.first_name }} {{ portfolio.last_name }} - Resume</title>
-   <meta name="description" content="{{ first_name }} - {{ summary }}">
-   <meta name="author" content="{{ first_name }} {{ last_name }}">
+  <!-- Site Info -->
+  <title>{{ portfolio.first_name }} {{ portfolio.last_name }} - Resume</title>
+  <meta name="description" content="{{ first_name }} - {{ summary }}">
+  <meta name="author" content="{{ first_name }} {{ last_name }}">
 
-   <!-- Open Graph Tags: The title of the page for social media sharing. It can match the title tag or be more descriptive. -->
-   <meta property="og:title" content="{{ first_name }} {{ last_name }}">
+  <!-- Open Graph Tags: The title of the page for social media sharing. It can match the title tag or be more descriptive. -->
+  <meta property="og:title" content="{{ first_name }} {{ last_name }}">
 
-   <!-- Open Graph Tags: Typically set to "website" for static sites or "article" for content-heavy pages. -->
-   <meta property="og:type" content="website">
+  <!-- Open Graph Tags: Typically set to "website" for static sites or "article" for content-heavy pages. -->
+  <meta property="og:type" content="website">
 
-   <!-- Open Graph Tags: The URL of the page, used to ensure link previews resolve to the correct page. -->
-   <meta property="og:url" content="{{ base_url }}/resume_pdf.html">
+  <!-- Open Graph Tags: The URL of the page, used to ensure link previews resolve to the correct page. -->
+  <meta property="og:url" content="{{ base_url }}/resume_pdf.html">
 
-   <!-- Open Graph Tags: URL of an image that represents the page. Useful for link previews. -->
-   <meta property="og:image" content="{{ base_url }}/{{ image_path }}">
+  <!-- Open Graph Tags: URL of an image that represents the page. Useful for link previews. -->
+  <meta property="og:image" content="{{ base_url }}/{{ image_path }}">
 
-   <!-- Open Graph Tags: Provides an alternative text for the image to improve accessibility. -->
-   <meta property="og:image:alt" content="{{ first_name }} {{ last_name }} Profile Image">
+  <!-- Open Graph Tags: Provides an alternative text for the image to improve accessibility. -->
+  <meta property="og:image:alt" content="{{ first_name }} {{ last_name }} Profile Image">
 
-   <!-- Preconnect for Google Fonts -->
-   <link rel="preconnect" href="https://fonts.googleapis.com">
-   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <!-- Custom Fonts -->
+  <link href="css/google_fonts_css2.css" rel="stylesheet">
 
-   <!-- Custom Font -->
-   <link
-      href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&family=Nunito:ital,wght@0,200..1000;1,200..1000&display=swap"
-      rel="stylesheet">
+  <!-- Stylesheet -->
 
-   <!-- Stylesheet -->
+  <link rel="stylesheet" href="css/modern_normalize.css" />
+  <link rel="stylesheet" href="css/html5bp.css">
+  <link rel="stylesheet" href="css/main.css">
+  <link rel="stylesheet" href="css/resume.css">
 
-   <link rel="stylesheet" href="css/modern_normalize.css" />
-   <link rel="stylesheet" href="css/html5bp.css">
-   <link rel="stylesheet" href="css/main.css">
-   <link rel="stylesheet" href="css/resume.css">
+  <!-- Set a theme color that matches your website's primary color -->
+  <meta name="theme-color" content="#fafafa">
 
-   <!-- Set a theme color that matches your website's primary color -->
-   <meta name="theme-color" content="#fafafa">
+  <!-- Favicon for all browsers -->
+  <link rel="icon" href="img/favicon.ico" sizes="any">
 
-   <!-- Favicon for all browsers -->
-   <link rel="icon" href="img/favicon.ico" sizes="any">
+  <!-- Web app manifest for Progressive Web Apps -->
+  <link rel="manifest" href="site.webmanifest">
 
-   <!-- Web app manifest for Progressive Web Apps -->
-   <link rel="manifest" href="site.webmanifest">
-
-   <!-- Content Security Policy: Uncomment to enhance security by restricting where content can be loaded from (useful for preventing certain attacks like XSS). Update if adding external sources (e.g., Google Fonts, Bootstrap CDN, analytics, etc). -->
-   <!-- <meta http-equiv="Content-Security-Policy" content=" default-src 'self'; script-src 'self' code.jquery.com; style-src 'self' fonts.googleapis.com; font-src fonts.gstatic.com; img-src 'self' images.examplecdn.com; "> -->
+  <!-- Content Security Policy: Uncomment to enhance security by restricting where content can be loaded from (useful for preventing certain attacks like XSS). Update if adding external sources (e.g., Google Fonts, Bootstrap CDN, analytics, etc). -->
+  <!-- <meta http-equiv="Content-Security-Policy" content=" default-src 'self'; script-src 'self' code.jquery.com; style-src 'self' fonts.googleapis.com; font-src fonts.gstatic.com; img-src 'self' images.examplecdn.com; "> -->
 </head>
 
 <body>
-   <header class="page-header">
-      <div class="container">
-         <div class="header-top flex-responsive">
-            <div class="header-info">
-               <h1>{{ first_name }} {% if middle_name %} {{ middle_name }} {% endif %} {{ last_name }}</h1>
-               {% if label %}<h2 class="header-label">{{ label }}</h2>{% endif %}
-               {% if contact %}
-               {% for info in contact %}
-               {% if info.email or info.phone or info.location %}
-               <address>
-                  <ul class="inline-list">
-                     {% if info.phone %}
-                     <li>
-                        <a href="tel:+{{ info.phone | replace('-', '') }}">{{ info.phone }}</a>
-                     </li>
-                     {% endif %}
-                     {% if info.email %}
-                     <li>
-                        <a href="mailto:{{ info.email }}">{{ info.email }}</a>
-                     </li>
-                     {% endif %}
-                     {% if info.location %}
-                     <li>
-                        <a href="https://maps.google.com/?q={{ info.location }}" target="_blank"
-                           rel="noopener noreferrer" aria-label="{{ info.location }}">
-                           <!-- location icon -->
-                           <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24"
-                              fill="currentColor"
-                              style="margin-left: -0.5rem; margin-right: -0.3rem; vertical-align: top;">
-                              <g>
-                                 <path
-                                    d="M12,2A7.008,7.008,0,0,0,5,9c0,5.353,6.036,11.45,6.293,11.707l.707.707.707-.707C12.964,20.45,19,14.353,19,9A7.008,7.008,0,0,0,12,2Zm0,16.533C10.471,16.825,7,12.553,7,9A5,5,0,0,1,17,9C17,12.546,13.527,16.823,12,18.533Z" />
-                                 <path d="M12,6a3,3,0,1,0,3,3A3,3,0,0,0,12,6Zm0,4a1,1,0,1,1,1-1A1,1,0,0,1,12,10Z" />
-                              </g>
-                           </svg>
-                           {{ info.location }}
-                        </a>
-                     </li>
-                     {% endif %}
-                  </ul>
-               </address>
-               {% endif %}
-               {% endfor %}
-               {% endif %}
-               {% if social_links %}
-               <ul class="inline-list">
-                  {% for link in social_links %}
-                  <li>
-                     <a href="{{ link.url }}" target="_blank" rel="noopener noreferrer" aria-label="{{ link.label }}">
-                        <!-- SVG icon for social link -->
-                        {% if link.svg_data %}{{ link.svg_data | safe }}{% endif %}
-                        {{ link.label }}
-                     </a>
-                  </li>
-                  {% endfor %}
-               </ul>
-               {% endif %}
-               {% if summary %}<p class="header-summary">{{ summary }}</p>{% endif %}
-            </div>
-         </div>
-      </div>
-   </header>
-
-   <div class="page-content">
-      <main>
-         {% if portfolio.work_experience %}
-         <section>
-            <h2 class="section-heading">Work Experience</h2>
-            {% for job in portfolio.work_experience %}
-            <section>
-               <h3>
-                  {% if job.url %}
-                  {{ job.position }} at
-                  <a href="{{ job.url }}" target="_blank" rel="noopener noreferrer">
-                     <!-- globe icon -->
-                     <svg aria-hidden="true" xmlns="http://www.w3.org/2000/svg" role="img" width="16" height="16"
-                        fill="currentColor" class="bi bi-globe-americas" viewBox="0 0 16 16"
-                        style="vertical-align: top;">
-                        <path
-                           d="M8 0a8 8 0 1 0 0 16A8 8 0 0 0 8 0M2.04 4.326c.325 1.329 2.532 2.54 3.717 3.19.48.263.793.434.743.484q-.121.12-.242.234c-.416.396-.787.749-.758 1.266.035.634.618.824 1.214 1.017.577.188 1.168.38 1.286.983.082.417-.075.988-.22 1.52-.215.782-.406 1.48.22 1.48 1.5-.5 3.798-3.186 4-5 .138-1.243-2-2-3.5-2.5-.478-.16-.755.081-.99.284-.172.15-.322.279-.51.216-.445-.148-2.5-2-1.5-2.5.78-.39.952-.171 1.227.182.078.099.163.208.273.318.609.304.662-.132.723-.633.039-.322.081-.671.277-.867.434-.434 1.265-.791 2.028-1.12.712-.306 1.365-.587 1.579-.88A7 7 0 1 1 2.04 4.327Z" />
-                     </svg>
-                     {{ job.company }}
-                  </a>
-                  {% else %}
-                  {{ job.position }} at {{ job.company }}
-                  {% endif %}
-               </h3>
-               {% if job.start_date and job.end_date %}
-               <p class="section-label">{{ job.start_date }} - {{ job.end_date }}</p>
-               {% endif %}
-               {% if job.summary %}<p style="font-size: small;">{{ job.summary }}</p>{% endif %}
-               {% if job.highlights %}
-               <p style="font-size: small; font-weight: bold;">Responsibilities</p>
-               <ul>
-                  {% for highlight in job.highlights %}<li style="font-size: x-small;">{{ highlight }}</li>{% endfor %}
-               </ul>
-               {% endif %}
-            </section>
-            {% endfor %}
-         </section>
-         {% endif %}
-
-         {% if portfolio.education %}
-         <section>
-            <h2 class="section-heading">Education</h2>
-            {% for edu in portfolio.education %}
-            <section>
-               <h3>
-                  {% if edu.url %}
-                  <a href="{{ edu.url }}" target="_blank" rel="noopener noreferrer">{{ edu.institution }}</a>
-                  {% else %}
-                  {{ edu.institution }}
-                  {% endif %}
-               </h3>
-               {% if edu.location %}<p class="section-label">{{ edu.location }}</p>{% endif %}
-               {% if edu.degrees %}
-               <p style="font-size: small; font-weight: bold;">Degrees</p>
-               <ul>
-                  {% for deg in edu.degrees %}<li>{{ deg }}</li>{% endfor %}
-               </ul>
-               {% endif %}
-               {% if edu.honors %}
-               <h4>Honors</h4>
-               <ul>
-                  {% for hon in edu.honors %}<li>{{ hon }}</li>{% endfor %}
-               </ul>
-               {% endif %}
-               {% if edu.gpa_major or edu.gpa_cumulative or edu.graduation_date %}
-               <p>
-                  {% if edu.gpa_major %}<span class="block">GPA in Major: {{ edu.gpa_major }}</span>{% endif %}
-                  {% if edu.gpa_cumulative %}<span class="block">Cumulative GPA: {{ edu.gpa_cumulative }}</span>{%
-                  endif %}
-                  {% if edu.enrollment_date and edu.graduation_date %}
-               <p class="section-label">{{ edu.enrollment_date }} - {{ edu.graduation_date }}</p>
-               {% endif %}
-               </p>
-               {% endif %}
-            </section>
-            {% endfor %}
-         </section>
-         {% endif %}
-
-         {% if portfolio.projects %}
-         <section>
-            <h2 class="section-heading">Projects</h2>
-            {% for project in portfolio.projects %}
-            <section>
-               <h3>
-                  {% if project.url %}
-                  <a href="{{ project.url }}" target="_blank" rel="noopener noreferrer">{{ project.title }}</a>
-                  {% else %}
-                  {{ project.title }}
-                  {% endif %}
-               </h3>
-               {% if project.summary %}<p>{{ project.summary }}</p>{% endif %}
-               {% if project.highlights %}
-               <ul>
-                  {% for highlight in project.highlights %}
-                  <li>
-                     {{ highlight }}
-                  </li>
-                  {% endfor %}
-               </ul>
-               {% endif %}
-               {% if project.tools %}
-               <p style="font-size: small; font-weight: bold;">Tools</p>
-               <ul class="inline-list">
-                  {% for tool in project.tools %}
-                  <li style="font-size: small; font-style: italic;">
-                     {{ tool }}
-                  </li>
-                  {% endfor %}
-               </ul>
-               {% endif %}
-            </section>
-            {% endfor %}
-         </section>
-         {% endif %}
-
-         {% if portfolio.skills %}
-         <section>
-            <h2 class="section-heading">Skills</h2>
-            <ul class="four-column-list">
-               {% for skill in portfolio.skills %}
-               <li>
-                  <p style="font-size: 10px; font-weight: bold;">{{ skill.name }}</p>
-                  <!-- <h3>{{ skill.name }}</h3> -->
-                  <div class="skill-bar-pdf">
-                     <div class="skill-bar-fill w-{{ skill.proficiency }}" role="meter"
-                        aria-valuenow="{{ skill.proficiency }}" aria-valuemin="0" aria-valuemax="100">
-                        {% if skill.proficiency_label %}
-                        <span class="skill-bar-fill-label">{{ skill.proficiency_label }}</span>
-                        {% else %}
-                        <span class="skill-bar-fill-label">{{ skill.proficiency }}%</span>
-                        {% endif %}
-                     </div>
-                  </div>
-               </li>
-               {% endfor %}
+  <header class="page-header">
+    <div class="container">
+      <div class="header-top flex-responsive">
+        <div class="header-info">
+          <h1>{{ portfolio.first_name }} {% if portfolio.middle_name %} {{ portfolio.middle_name }} {% endif %} {{
+            portfolio.last_name }}</h1>
+          {% if portfolio.label %}<h2 class="header-label">{{ portfolio.label }}</h2>{% endif %}
+          {% if portfolio.contact %}
+          {% for info in portfolio.contact %}
+          {% if info.email or info.phone or info.location %}
+          <address>
+            <ul class="inline-list">
+              {% if info.phone %}
+              <li>
+                <a href="tel:+{{ info.phone | replace('-', '') }}">{{ info.phone }}</a>
+              </li>
+              {% endif %}
+              {% if info.email %}
+              <li>
+                <a href="mailto:{{ info.email }}">{{ info.email }}</a>
+              </li>
+              {% endif %}
+              {% if info.location %}
+              <li>
+                <a href="https://maps.google.com/?q={{ info.location }}" target="_blank" rel="noopener noreferrer"
+                  aria-label="{{ info.location }}">
+                  <!-- location icon -->
+                  <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="currentColor"
+                    style="margin-left: -0.5rem; margin-right: -0.3rem; vertical-align: top;">
+                    <g>
+                      <path
+                        d="M12,2A7.008,7.008,0,0,0,5,9c0,5.353,6.036,11.45,6.293,11.707l.707.707.707-.707C12.964,20.45,19,14.353,19,9A7.008,7.008,0,0,0,12,2Zm0,16.533C10.471,16.825,7,12.553,7,9A5,5,0,0,1,17,9C17,12.546,13.527,16.823,12,18.533Z" />
+                      <path d="M12,6a3,3,0,1,0,3,3A3,3,0,0,0,12,6Zm0,4a1,1,0,1,1,1-1A1,1,0,0,1,12,10Z" />
+                    </g>
+                  </svg>
+                  {{ info.location }}
+                </a>
+              </li>
+              {% endif %}
             </ul>
-         </section>
-         {% endif %}
+          </address>
+          {% endif %}
+          {% endfor %}
+          {% endif %}
 
-         {% if portfolio.volunteer_experience %}
-         <section>
-            <h2 class="section-heading">Volunteer Experience</h2>
-            {% for vol in portfolio.volunteer_experience %}
-            <section>
-               <h3>
-                  {% if vol.url %}
-                  {{ vol.position }} at
-                  <a href="{{ vol.url }} target=" _blank" rel="noopener noreferrer"">
+          {% if portfolio.social_links %}
+          <ul class="inline-list">
+            {% for link in portfolio.social_links %}
+            <li>
+              <a href="{{ link.url }}" target="_blank" rel="noopener noreferrer" aria-label="{{ link.label }}">
+                <!-- SVG icon for social link -->
+                {% if link.svg_data %}{{ link.svg_data | safe }}{% endif %}
+                {{ link.label }}
+              </a>
+            </li>
+            {% endfor %}
+          </ul>
+          {% endif %}
+          {% if portfolio.summary %}<p class="header-summary">{{ portfolio.summary }}</p>{% endif %}
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <div class="page-content">
+    <main>
+      {% if portfolio.education %}
+      <section>
+        <h2 class="section-heading">Education</h2>
+        {% for edu in portfolio.education %}
+        <section>
+          <h3>
+            {% if edu.url %}
+            <a href="{{ edu.url }}" target="_blank" rel="noopener noreferrer">{{ edu.institution }}</a>
+            {% else %}
+            {{ edu.institution }}
+            {% endif %}
+          </h3>
+          {% if edu.location %}<p class="section-label">{{ edu.location }}</p>{% endif %}
+          {% if edu.degrees %}
+          <p style="font-size: small; font-weight: bold;">Degrees</p>
+          <ul>
+            {% for deg in edu.degrees %}<li>{{ deg }}</li>{% endfor %}
+          </ul>
+          {% endif %}
+          {% if edu.honors %}
+          <h4>Honors</h4>
+          <ul>
+            {% for hon in edu.honors %}<li>{{ hon }}</li>{% endfor %}
+          </ul>
+          {% endif %}
+          {% if edu.gpa_major or edu.gpa_cumulative or edu.graduation_date %}
+          <p>
+            {% if edu.gpa_major %}<span class="block">GPA in Major: {{ edu.gpa_major }}</span>{% endif %}
+            {% if edu.gpa_cumulative %}<span class="block">Cumulative GPA: {{ edu.gpa_cumulative }}</span>{%
+            endif %}
+            {% if edu.enrollment_date and edu.graduation_date %}
+              <p class="section-label">{{ edu.enrollment_date }} - {{ edu.graduation_date }}</p>
+            {% endif %}
+          </p>
+          {% endif %}
+        </section>
+        {% endfor %}
+      </section>
+      {% endif %}
+
+      {% if portfolio.languages %}
+      <section id="languages">
+        <h2 class="section-heading">Languages</h2>
+        <ul class="four-column-list">
+          {% for lang in portfolio.languages %}
+          <li>
+            <h3>{{ lang.name }}</h3>
+            <p class="section-label">{{ lang.fluency }}</p>
+          </li>
+          {% endfor %}
+        </ul>
+      </section>
+      {% endif %}
+
+      {% if portfolio.work_experience %}
+      <section>
+        <h2 class="section-heading">Work Experience</h2>
+        {% for job in portfolio.work_experience %}
+        <section>
+          <h3>
+            {% if job.url %}
+            {{ job.position }} at
+            <a href="{{ job.url }}" target="_blank" rel="noopener noreferrer">
+              <!-- globe icon -->
+              <svg aria-hidden="true" xmlns="http://www.w3.org/2000/svg" role="img" width="16" height="16"
+                fill="currentColor" class="bi bi-globe-americas" viewBox="0 0 16 16" style="vertical-align: top;">
+                <path
+                  d="M8 0a8 8 0 1 0 0 16A8 8 0 0 0 8 0M2.04 4.326c.325 1.329 2.532 2.54 3.717 3.19.48.263.793.434.743.484q-.121.12-.242.234c-.416.396-.787.749-.758 1.266.035.634.618.824 1.214 1.017.577.188 1.168.38 1.286.983.082.417-.075.988-.22 1.52-.215.782-.406 1.48.22 1.48 1.5-.5 3.798-3.186 4-5 .138-1.243-2-2-3.5-2.5-.478-.16-.755.081-.99.284-.172.15-.322.279-.51.216-.445-.148-2.5-2-1.5-2.5.78-.39.952-.171 1.227.182.078.099.163.208.273.318.609.304.662-.132.723-.633.039-.322.081-.671.277-.867.434-.434 1.265-.791 2.028-1.12.712-.306 1.365-.587 1.579-.88A7 7 0 1 1 2.04 4.327Z" />
+              </svg>
+              {{ job.company }}
+            </a>
+            {% else %}
+            {{ job.position }} at {{ job.company }}
+            {% endif %}
+          </h3>
+          {% if job.start_date and job.end_date %}
+          <p class="section-label">{{ job.start_date }} - {{ job.end_date }}</p>
+          {% endif %}
+          {% if job.summary %}<p style="font-size: small;">{{ job.summary }}</p>{% endif %}
+          {% if job.highlights %}
+          <p style="font-size: small; font-weight: bold;">Responsibilities</p>
+          <ul>
+            {% for highlight in job.highlights %}<li style="font-size: x-small;">{{ highlight }}</li>{% endfor %}
+          </ul>
+          {% endif %}
+        </section>
+        {% endfor %}
+      </section>
+      {% endif %}
+
+      {% if portfolio.projects %}
+      <section class="projects-section">
+        <h2 class="section-heading">Projects</h2>
+        {% for project in portfolio.projects %}
+        <section>
+          <h3>
+            {% if project.url %}
+            <a href="{{ project.url }}" target="_blank" rel="noopener noreferrer">{{ project.title }}</a>
+            {% else %}
+            {{ project.title }}
+            {% endif %}
+          </h3>
+          {% if project.summary %}<p>{{ project.summary }}</p>{% endif %}
+          {% if project.highlights %}
+          <ul>
+            {% for highlight in project.highlights %}
+            <li>
+              {{ highlight }}
+            </li>
+            {% endfor %}
+          </ul>
+          {% endif %}
+          {% if project.tools %}
+          <p style="font-size: small; font-weight: bold;">Tools</p>
+          <ul class="inline-list">
+            {% for tool in project.tools %}
+            <li style="font-size: small; font-style: italic;">
+              {{ tool }}
+            </li>
+            {% endfor %}
+          </ul>
+          {% endif %}
+        </section>
+        {% endfor %}
+      </section>
+      {% endif %}
+
+      {% if portfolio.skills %}
+      <section id="skills" class="page-break-before">
+        <h2 class="section-heading">Skills</h2>
+        <ul class="four-column-list">
+          {% for skill in portfolio.skills %}
+          <li>
+            <p style="font-size: 10px; font-weight: bold;">{{ skill.name }}</p>
+            <!-- <h3>{{ skill.name }}</h3> -->
+            <div class="skill-bar-pdf">
+              <div class="skill-bar-fill w-{{ skill.proficiency }}" role="meter" aria-valuenow="{{ skill.proficiency }}"
+                aria-valuemin="0" aria-valuemax="100">
+                {% if skill.proficiency_label %}
+                <span class="skill-bar-fill-label">{{ skill.proficiency_label }}</span>
+                {% else %}
+                <span class="skill-bar-fill-label">{{ skill.proficiency }}%</span>
+                {% endif %}
+              </div>
+            </div>
+          </li>
+          {% endfor %}
+        </ul>
+      </section>
+      {% endif %}
+
+      {% if portfolio.volunteer_experience %}
+      <section>
+        <h2 class="section-heading">Volunteer Experience</h2>
+        {% for vol in portfolio.volunteer_experience %}
+        <section>
+          <h3>
+            {% if vol.url %}
+            {{ vol.position }} at
+            <a href="{{ vol.url }} target=" _blank" rel="noopener noreferrer"">
                      <!-- globe icon -->
                      <svg aria-hidden=" true" xmlns="http://www.w3.org/2000/svg" role="img" width="16" height="16"
-                     fill="currentColor" class="bi bi-globe-americas" viewBox="0 0 16 16" style="vertical-align: top;">
-                     <path
-                        d="M8 0a8 8 0 1 0 0 16A8 8 0 0 0 8 0M2.04 4.326c.325 1.329 2.532 2.54 3.717 3.19.48.263.793.434.743.484q-.121.12-.242.234c-.416.396-.787.749-.758 1.266.035.634.618.824 1.214 1.017.577.188 1.168.38 1.286.983.082.417-.075.988-.22 1.52-.215.782-.406 1.48.22 1.48 1.5-.5 3.798-3.186 4-5 .138-1.243-2-2-3.5-2.5-.478-.16-.755.081-.99.284-.172.15-.322.279-.51.216-.445-.148-2.5-2-1.5-2.5.78-.39.952-.171 1.227.182.078.099.163.208.273.318.609.304.662-.132.723-.633.039-.322.081-.671.277-.867.434-.434 1.265-.791 2.028-1.12.712-.306 1.365-.587 1.579-.88A7 7 0 1 1 2.04 4.327Z" />
-                     </svg>
-                     {{ vol.organization }}
-                  </a>
-                  {% else %}
-                  {{ vol.position }} at {{ vol.organization }}
-                  {% endif %}
-               </h3>
-               {% if vol.start_date and vol.end_date %}
-               <p class="section-label">{{ vol.start_date }} - {{ vol.end_date }}</p>
-               {% endif %}
-               {% if vol.summary %}<p>{{ vol.summary }}</p>{% endif %}
-               {% if vol.highlights %}
-               <ul>
-                  {% for highlight in vol.highlights %}<li>{{ highlight }}</li>{% endfor %}
-               </ul>
-               {% endif %}
-            </section>
-            {% endfor %}
-         </section>
-         {% endif %}
-
-         {% if portfolio.languages %}
-         <section id="languages">
-            <h2 class="section-heading">Languages</h2>
-            <ul class="unstyled-list">
-               {% for lang in portfolio.languages %}
-               <li>
-                  <h3>{{ lang.name }}</h3>
-                  <p class="section-label">{{ lang.fluency }}</p>
-               </li>
-               {% endfor %}
-            </ul>
-         </section>
-         {% endif %}
-
-         {% for memberName, memberValue in extra_fields.items() %}
-         <section>
-            <h2 class="section-heading">{{memberName}}</h2>
-            {% if isinstance(memberValue, list) %}
-            {% for item in memberValue %}
-            <section>
-               <h3>{{ item }}</h3>
-            </section>
-            {% endfor %}
+              fill="currentColor" class="bi bi-globe-americas" viewBox="0 0 16 16" style="vertical-align: top;">
+              <path
+                d="M8 0a8 8 0 1 0 0 16A8 8 0 0 0 8 0M2.04 4.326c.325 1.329 2.532 2.54 3.717 3.19.48.263.793.434.743.484q-.121.12-.242.234c-.416.396-.787.749-.758 1.266.035.634.618.824 1.214 1.017.577.188 1.168.38 1.286.983.082.417-.075.988-.22 1.52-.215.782-.406 1.48.22 1.48 1.5-.5 3.798-3.186 4-5 .138-1.243-2-2-3.5-2.5-.478-.16-.755.081-.99.284-.172.15-.322.279-.51.216-.445-.148-2.5-2-1.5-2.5.78-.39.952-.171 1.227.182.078.099.163.208.273.318.609.304.662-.132.723-.633.039-.322.081-.671.277-.867.434-.434 1.265-.791 2.028-1.12.712-.306 1.365-.587 1.579-.88A7 7 0 1 1 2.04 4.327Z" />
+              </svg>
+              {{ vol.organization }}
+            </a>
+            {% else %}
+            {{ vol.position }} at {{ vol.organization }}
             {% endif %}
-         </section>
-         {% endfor %}
-      </main>
-   </div>
-   <script src="js/app.js"></script>
+          </h3>
+          {% if vol.start_date and vol.end_date %}
+          <p class="section-label">{{ vol.start_date }} - {{ vol.end_date }}</p>
+          {% endif %}
+          {% if vol.summary %}<p>{{ vol.summary }}</p>{% endif %}
+          {% if vol.highlights %}
+          <ul>
+            {% for highlight in vol.highlights %}<li>{{ highlight }}</li>{% endfor %}
+          </ul>
+          {% endif %}
+        </section>
+        {% endfor %}
+      </section>
+      {% endif %}
+
+      {% for memberName, memberValue in extra_fields.items() %}
+      <section>
+        <h2 class="section-heading">{{memberName}}</h2>
+        {% if isinstance(memberValue, list) %}
+        {% for item in memberValue %}
+        <section>
+          <h3>{{ item }}</h3>
+        </section>
+        {% endfor %}
+        {% endif %}
+      </section>
+      {% endfor %}
+    </main>
+  </div>
+  <script src="js/app.js"></script>
 </body>
 
 </html>
