@@ -12,6 +12,7 @@ import textwrap
 from datetime import datetime
 from typing import Iterable, Optional, Union, cast
 
+from constants import LOG_LEVEL
 from rich._log_render import FormatTimeCallable, LogRender
 from rich.console import Console, ConsoleRenderable, RenderableType
 from rich.containers import Renderables
@@ -189,12 +190,12 @@ class RichHandlerEveryLine(RichHandler):
             super().emit(sub)
 
 
-def configure_logging(level: int = logging.DEBUG) -> None:
+def configure_logging(level: int = LOG_LEVEL) -> None:
     """
     Configure root logging with RichHandlerEveryLine for script output.
 
     Args:
-        level (int, optional): Root log level. Defaults to logging.DEBUG.
+        level (int, optional): Root log level. Defaults to LOG_LEVEL.
 
     :return: None
     """
