@@ -3,3 +3,5 @@
 
 # generated files
 generated/**
+**/__pycache__
+**/__pycache__/**

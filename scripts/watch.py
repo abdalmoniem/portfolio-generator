@@ -15,8 +15,8 @@ from subprocess import run
 from sys import executable as python_executable
 from typing import Optional
 
-from livereload import Server
-from rich.logging import RichHandler
+from livereload.server import Server as LiveReloadServer
+from logging_setup import configure_logging
 
 PORT = 8000
 HOST = "localhost"
@@ -25,6 +25,7 @@ TEMPLATES_DIR = SCRIPT_DIR / "../templates"
 SCRIPT_TO_RUN = SCRIPT_DIR / "generate_portfolio.py"
 
 watched_paths = [
+    SCRIPT_DIR,
     SCRIPT_TO_RUN,
     TEMPLATES_DIR / "js",
     TEMPLATES_DIR / "css",
@@ -38,14 +39,24 @@ watched_paths = [
 ]
 
 
-logging.basicConfig(
-    level=logging.DEBUG,
-    format="%(message)s",
-    datefmt="[%a, %d/%b/%Y - %I:%M:%S %p]",
-    handlers=[RichHandler(rich_tracebacks=True)],
-)
-
+configure_logging()
 logger = logging.getLogger(__name__)
+
+
+class Server(LiveReloadServer):
+    """LiveReload server that logs through root Rich handlers only."""
+
+    def _setup_logging(self) -> None:
+        """
+        Set library log levels without adding LiveReload's Tornado StreamHandler.
+
+        The default implementation attaches a second handler and breaks Rich formatting.
+
+        :return: None
+        """
+
+        logging.getLogger("livereload").setLevel(logging.DEBUG)
+        logging.getLogger("tornado").setLevel(logging.DEBUG)
 
 
 def run_script(changed_path: Optional[Path] | Optional[list[str]] = None) -> None:  # noqa: PYI016, UP045
@@ -138,8 +149,6 @@ def main() -> None:
             func=lambda changed_file=dir: run_script(changed_file),
         )
 
-    # Serve current directory (so output.html is served)
-    logger.info(f"Serving on http://{HOST}:{PORT} (LiveReload enabled)")
     server.serve(root=SCRIPT_DIR / "../generated", port=PORT, host=HOST)
 
 

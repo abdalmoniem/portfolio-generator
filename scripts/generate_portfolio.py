@@ -40,16 +40,11 @@ from typing import Optional
 import json5
 from dacite import from_dict
 from jinja2 import Environment, FileSystemLoader
-from rich.logging import RichHandler
 from weasyprint import HTML
 
-logging.basicConfig(
-    level=logging.DEBUG,
-    format="%(message)s",
-    datefmt="[%a, %d/%b/%Y - %I:%M:%S %p]",
-    handlers=[RichHandler(rich_tracebacks=True)],
-)
+from logging_setup import configure_logging
 
+configure_logging()
 logger = logging.getLogger(__name__)
 
 
@@ -490,7 +485,6 @@ def main() -> None:
             HTML(filename=str(resume_pdf_path), media_type="screen").write_pdf(
                 str(pdf_output_path)
             )
-            check_status(pdf_output_path.name, lambda: True)
     except KeyboardInterrupt:
         logger.warning("portfolio generation interrupted!")
 
