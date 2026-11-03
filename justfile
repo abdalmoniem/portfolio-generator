@@ -50,8 +50,8 @@ post_generate:
 
 [private]
 file_info files:
-    @file "$files"
+    @file $files
 
 [private]
 du_info files:
-    @du -hs --time --time-style=+'%a, %d/%b/%Y - %r' "$files"
+    @du -hs --time --time-style=+'%a, %d/%b/%Y - %r' $files

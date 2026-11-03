@@ -15,6 +15,7 @@ from subprocess import run
 from sys import executable as python_executable
 from typing import Optional
 
+from constants import LOG_LEVEL
 from livereload.server import Server as LiveReloadServer
 from logging_setup import configure_logging
 
@@ -26,7 +27,6 @@ SCRIPT_TO_RUN = SCRIPT_DIR / "generate_portfolio.py"
 
 watched_paths = [
     SCRIPT_DIR,
-    SCRIPT_TO_RUN,
     TEMPLATES_DIR / "js",
     TEMPLATES_DIR / "css",
     TEMPLATES_DIR / "img",
@@ -55,8 +55,8 @@ class Server(LiveReloadServer):
         :return: None
         """
 
-        logging.getLogger("livereload").setLevel(logging.DEBUG)
-        logging.getLogger("tornado").setLevel(logging.DEBUG)
+        logging.getLogger("livereload").setLevel(LOG_LEVEL)
+        logging.getLogger("tornado").setLevel(LOG_LEVEL)
 
 
 def run_script(changed_path: Optional[Path] | Optional[list[str]] = None) -> None:  # noqa: PYI016, UP045
@@ -108,7 +108,7 @@ def run_script(changed_path: Optional[Path] | Optional[list[str]] = None) -> Non
                         logger.info("Reloading browser...")
     except KeyboardInterrupt:
         logger.warning(f"{SCRIPT_TO_RUN} execution interrupted!")
-        sys.exit(1)
+        sys.exit(0)
 
 
 def main() -> None:
