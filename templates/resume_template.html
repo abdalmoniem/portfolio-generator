@@ -5,226 +5,216 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
 
-  <!-- Site Info -->
   <title>{{ portfolio.first_name }} {{ portfolio.last_name }} - Resume</title>
-  <meta name="description" content="{{ first_name }} {{ last_name }} - {{ summary }}">
-  <meta name="author" content="{{ first_name }} {{ last_name }}">
+  <meta name="description"
+    content="{{ portfolio.first_name }} {{ portfolio.last_name }} - {{ portfolio.summary | striptags }}">
+  <meta name="author" content="{{ portfolio.first_name }} {{ portfolio.last_name }}">
 
-  <!-- Open Graph Tags: The title of the page for social media sharing. It can match the title tag or be more descriptive. -->
-  <meta property="og:title" content="{{ first_name }} {{ last_name }}">
-
-  <!-- Open Graph Tags: Typically set to "website" for static sites or "article" for content-heavy pages. -->
+  <meta property="og:title" content="{{ portfolio.first_name }} {{ portfolio.last_name }} - Resume">
   <meta property="og:type" content="website">
+  <meta property="og:url" content="{{ portfolio.base_url }}/resume.html">
+  <meta property="og:image" content="{{ portfolio.base_url }}/{{ portfolio.image_path }}">
+  <meta property="og:image:alt" content="{{ portfolio.first_name }} {{ portfolio.last_name }} Profile Image">
+  <meta name="theme-color" content="#f8fafc">
 
-  <!-- Open Graph Tags: The URL of the page, used to ensure link previews resolve to the correct page. -->
-  <meta property="og:url" content="{{ base_url }}/resume.html">
+  <script>
+    (function () {
+      try {
+        var stored = localStorage.getItem("theme");
+        var theme = stored || (window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light");
+        document.documentElement.dataset.theme = theme;
+      } catch (error) {
+        document.documentElement.dataset.theme = "light";
+      }
+      document.documentElement.classList.add("js");
+    })();
+  </script>
 
-  <!-- Open Graph Tags: URL of an image that represents the page. Useful for link previews. -->
-  <meta property="og:image" content="{{ base_url }}/{{ image_path }}">
-
-  <!-- Open Graph Tags: Provides an alternative text for the image to improve accessibility. -->
-  <meta property="og:image:alt" content="{{ first_name }} {{ last_name }} Profile Image">
-
-  <!-- Custom Fonts -->
-  <link href="css/google_fonts_css2.css" rel="stylesheet">
-
-  <!-- Stylesheet -->
-
-  <link rel="stylesheet" href="css/modern_normalize.css" />
-  <link rel="stylesheet" href="css/html5bp.css">
-  <link rel="stylesheet" href="css/main.css">
-  <link rel="stylesheet" href="css/resume.css">
-
-  <!-- Set a theme color that matches your website's primary color -->
-  <meta name="theme-color" content="#fafafa">
-
-  <!-- Favicon for all browsers -->
   <link rel="icon" href="img/favicon.ico" sizes="any">
-
-  <!-- Web app manifest for Progressive Web Apps -->
-  <link rel="manifest" href="site.webmanifest">
-
-  <!-- Content Security Policy: Uncomment to enhance security by restricting where content can be loaded from (useful for preventing certain attacks like XSS). Update if adding external sources (e.g., Google Fonts, Bootstrap CDN, analytics, etc). -->
-  <!-- <meta http-equiv="Content-Security-Policy" content=" default-src 'self'; script-src 'self' code.jquery.com; style-src 'self' fonts.googleapis.com; font-src fonts.gstatic.com; img-src 'self' images.examplecdn.com; "> -->
+  <link href="css/fonts.css" rel="stylesheet">
+  <link rel="stylesheet" href="css/modern_normalize.css">
+  <link rel="stylesheet" href="css/tokens.css">
+  <link rel="stylesheet" href="css/components.css">
+  <link rel="stylesheet" href="css/resume.css">
 </head>
 
 <body>
-  <header class="page-header">
-    <div class="container">
-      <div class="header-top flex-responsive">
-        <div class="header-info">
-          <h1>{{ portfolio.first_name }} {% if portfolio.middle_name %} {{ portfolio.middle_name }} {% endif %} {{
-            portfolio.last_name }}</h1>
-          {% if portfolio.contact %}
-          {% for info in contact %}
-          {% if info.email or info.phone or info.location %}
-          <address>
-            <ul class="inline-list-flexible flex-responsive">
-              {% if info.phone %}
-              <li>
-                <a href="tel:+{{ info.phone | replace('-', '') }}">{{ info.phone }}</a>
-              </li>
-              {% endif %}
-              {% if info.email %}
-              <li>
-                <a href="mailto:{{ info.email }}">{{ info.email }}</a>
-              </li>
-              {% endif %}
-              {% if info.location %}
-              <li>
-                {{ info.location }}
-              </li>
-              {% endif %}
-            </ul>
-          </address>
-          {% endif %}
-          {% endfor %}
-          {% endif %}
-          {% if portfolio.social_links %}
-          <ul class="inline-list-flexible flex-responsive">
-            {% for link in social_links %}
-            <li>
-              <a href="{{ link.url }}" rel="noopener noreferrer" aria-label="{{ link.label }}" class="link-with-icon">
-                {% if link.svg_data %}{{ link.svg_data | safe }}{% endif %}
-                {{ link.label }}
-              </a>
-            </li>
-            {% endfor %}
-          </ul>
-          {% endif %}
-          {% if portfolio.summary %}<p class="header-summary">{{ portfolio.summary }}</p>{% endif %}
-        </div>
-      </div>
+  <a class="skip-link" href="#main">Skip to content</a>
+
+  <header class="resume-topbar">
+    <div class="resume-shell">
+      <a class="resume-brand" href="index.html">{{ portfolio.first_name }} {{ portfolio.last_name }}</a>
+      <nav aria-label="Resume actions">
+        <a href="index.html">Portfolio</a>
+        <a href="resume.pdf" download>Download PDF</a>
+      </nav>
+      <button id="theme-toggle" class="theme-toggle" type="button" aria-label="Toggle color theme" aria-pressed="false">
+        <span class="theme-icon" aria-hidden="true">☾</span>
+      </button>
     </div>
   </header>
 
-  <div class="page-content">
-    <div class="container">
-      <main>
+  <main id="main" class="resume-shell resume">
+    <header class="resume-header">
+      <div class="resume-heading">
+        <h1>{{ portfolio.first_name }}{% if portfolio.middle_name %} {{ portfolio.middle_name }}{% endif %} {{ portfolio.last_name }}</h1>
+        {% if portfolio.label %}<p class="resume-label">{{ portfolio.label }}</p>{% endif %}
+      </div>
+
+      {% if portfolio.contact %}
+      <address class="contact-list resume-contact">
+        {% for info in portfolio.contact %}
+        {% if info.email or info.phone or info.location %}
+        <div class="contact-group">
+          {% if info.phone %}<a class="chip" href="tel:{{ info.phone | replace(' ', '') | replace('-', '') }}">{{ info.phone }}</a>{% endif %}
+          {% if info.email %}<a class="chip" href="mailto:{{ info.email }}">{{ info.email }}</a>{% endif %}
+          {% if info.location %}<span class="contact-location">📍 {{ info.location }}</span>{% endif %}
+        </div>
+        {% endif %}
+        {% endfor %}
+      </address>
+      {% endif %}
+
+      {% if portfolio.social_links %}
+      <ul class="resume-social">
+        {% for link in portfolio.social_links %}
+        <li>
+          <a href="{{ link.url }}" target="_blank" rel="noopener noreferrer" aria-label="{{ link.label }}">
+            {% if link.svg_data %}<span class="resume-social-icon" aria-hidden="true">{{ link.svg_data | safe }}</span>{% endif %}
+            <span>{{ link.label }}</span>
+          </a>
+        </li>
+        {% endfor %}
+      </ul>
+      {% endif %}
+
+      {% if portfolio.summary %}<p class="resume-summary">{{ portfolio.summary }}</p>{% endif %}
+    </header>
+
+    <div class="resume-body">
+      <div class="resume-main">
         {% if portfolio.work_experience %}
-        <section>
-          <h2 class="section-heading">Work Experience</h2>
+        <section class="resume-section link-section" aria-labelledby="experience-title">
+          <h2 id="experience-title">Work Experience</h2>
           {% for job in portfolio.work_experience %}
-          <section>
+          <article class="resume-entry">
             <h3>
-              {% if job.url %}
-              {{ job.position }} at <a href="{{ job.url }}">{{ job.company }}</a>
-              {% else %}
-              {{ job.position }} at {{ job.company }}
-              {% endif %}
+              {{ job.position }}
+              {% if job.url %}at <a href="{{ job.url }}">{{ job.company }}</a>{% else %}at {{ job.company }}{% endif %}
             </h3>
             {% if job.start_date and job.end_date %}
-            <p class="section-label">{{ job.start_date }} - {{ job.end_date }}</p>
+            <p class="resume-meta">{{ job.start_date }} — {{ job.end_date }}</p>
             {% endif %}
             {% if job.summary %}<p>{{ job.summary }}</p>{% endif %}
             {% if job.highlights %}
-            <h5>Responsibilities</h5>
-            <ul>
+            <h4>Highlights</h4>
+            <ul class="resume-list">
               {% for highlight in job.highlights %}<li>{{ highlight }}</li>{% endfor %}
             </ul>
             {% endif %}
-          </section>
+          </article>
           {% endfor %}
         </section>
         {% endif %}
 
         {% if portfolio.projects %}
-        <section>
-          <h2 class="section-heading">Projects</h2>
+        <section class="resume-section link-section" aria-labelledby="projects-title">
+          <h2 id="projects-title">Projects</h2>
           {% for project in portfolio.projects %}
-          <section>
+          <article class="resume-entry">
             <h3>
-              {% if project.url %}
-              <a href="{{ project.url }}">{{ project.title }}</a>
-              {% else %}
-              {{ project.title }}
-              {% endif %}
+              {% if project.url %}<a href="{{ project.url }}">{{ project.title }}</a>{% else %}{{ project.title }}{% endif %}
             </h3>
             {% if project.summary %}<p>{{ project.summary }}</p>{% endif %}
             {% if project.highlights %}
-            <ul>
-              {% for highlight in project.highlights %}
-              <li>
-                {{ highlight }}
-              </li>
-              {% endfor %}
+            <ul class="resume-list">
+              {% for highlight in project.highlights %}<li>{{ highlight }}</li>{% endfor %}
             </ul>
             {% endif %}
             {% if project.tools %}
-            <h4>Tools</h4>
-            <p>
-              {% for tool in project.tools %}
-              {% if loop.last %}
-              {{ tool }}.
-              {% else %}
-              {{ tool }},
-              {% endif %}
-              {% endfor %}
-            </p>
+            <ul class="resume-tags" aria-label="Tools used in {{ project.title }}">
+              {% for tool in project.tools %}<li>{{ tool }}</li>{% endfor %}
+            </ul>
             {% endif %}
-          </section>
+          </article>
           {% endfor %}
         </section>
         {% endif %}
-      </main>
 
-      <!-- Sidebar Section -->
-      <aside>
-        {% if portfolio.education %}
-        <section>
-          <h2 class="section-heading">Education</h2>
-          {% for edu in portfolio.education %}
-          <section>
+        {% if portfolio.volunteer_experience %}
+        <section class="resume-section link-section" aria-labelledby="volunteer-title">
+          <h2 id="volunteer-title">Volunteer Experience</h2>
+          {% for vol in portfolio.volunteer_experience %}
+          <article class="resume-entry">
             <h3>
-              {% if edu.url %}
-              <a href="{{ edu.url }}">{{ edu.institution }}</a>
-              {% else %}
-              {{ edu.institution }}
-              {% endif %}
+              {{ vol.position }}
+              {% if vol.url %}at <a href="{{ vol.url }}">{{ vol.organization }}</a>{% else %}at {{ vol.organization }}{% endif %}
             </h3>
-            {% if edu.location %}<p class="section-label">{{ edu.location }}</p>{% endif %}
+            {% if vol.start_date and vol.end_date %}
+            <p class="resume-meta">{{ vol.start_date }} — {{ vol.end_date }}</p>
+            {% endif %}
+            {% if vol.summary %}<p>{{ vol.summary }}</p>{% endif %}
+            {% if vol.highlights %}
+            <ul class="resume-list">
+              {% for highlight in vol.highlights %}<li>{{ highlight }}</li>{% endfor %}
+            </ul>
+            {% endif %}
+          </article>
+          {% endfor %}
+        </section>
+        {% endif %}
+      </div>
+
+      <aside class="resume-aside">
+        {% if portfolio.education %}
+        <section class="resume-section link-section" aria-labelledby="education-title">
+          <h2 id="education-title">Education</h2>
+          {% for edu in portfolio.education %}
+          <article class="resume-entry">
+            <h3>
+              {% if edu.url %}<a href="{{ edu.url }}">{{ edu.institution }}</a>{% else %}{{ edu.institution }}{% endif %}
+            </h3>
+            {% if edu.location %}<p class="resume-meta">{{ edu.location }}</p>{% endif %}
             {% if edu.degrees %}
-            <h4>Degrees</h4>
-            <ul>
+            <ul class="resume-list">
               {% for deg in edu.degrees %}<li>{{ deg }}</li>{% endfor %}
             </ul>
             {% endif %}
             {% if edu.honors %}
             <h4>Honors</h4>
-            <ul>
+            <ul class="resume-list">
               {% for hon in edu.honors %}<li>{{ hon }}</li>{% endfor %}
             </ul>
             {% endif %}
-            {% if edu.gpa_major or edu.gpa_cumulative or edu.graduation_date %}
-            <p>
-              {% if edu.gpa_major %}<span class="block">GPA in Major: {{ edu.gpa_major }}</span>{% endif %}
-              {% if edu.gpa_cumulative %}<span class="block">Cumulative GPA: {{ edu.gpa_cumulative }}</span>{% endif %}
-              {% if edu.enrollment_date and edu.graduation_date %}
-            <p class="section-label">{{ edu.enrollment_date }} - {{ edu.graduation_date }}</p>
-            {% endif %}
+            {% if edu.gpa_major or edu.gpa_cumulative %}
+            <p class="resume-meta">
+              {% if edu.gpa_major %}GPA in Major: {{ edu.gpa_major }}{% endif %}
+              {% if edu.gpa_major and edu.gpa_cumulative %} · {% endif %}
+              {% if edu.gpa_cumulative %}Cumulative GPA: {{ edu.gpa_cumulative }}{% endif %}
             </p>
             {% endif %}
-          </section>
+            {% if edu.enrollment_date and edu.graduation_date %}
+            <p class="resume-meta">{{ edu.enrollment_date }} — {{ edu.graduation_date }}</p>
+            {% endif %}
+          </article>
           {% endfor %}
         </section>
         {% endif %}
 
         {% if portfolio.skills %}
-        <section>
-          <h2 class="section-heading">Skills</h2>
-          <ul class="unstyled-list">
+        <section class="resume-section link-section" aria-labelledby="skills-title">
+          <h2 id="skills-title">Skills</h2>
+          <ul class="resume-skills">
             {% for skill in portfolio.skills %}
+            {% set level = skill.proficiency | default(0, true) | int %}
             <li>
-              <h3>{{ skill.name }}</h3>
-              <div class="skill-bar">
-                <div class="skill-bar-fill w-{{ skill.proficiency }}" role="meter"
-                  aria-valuenow="{{ skill.proficiency }}" aria-valuemin="0" aria-valuemax="100">
-                  {% if skill.proficiency_label %}
-                  <span class="skill-bar-fill-label">{{ skill.proficiency_label }}</span>
-                  {% else %}
-                  <span class="skill-bar-fill-label">{{ skill.proficiency }}%</span>
-                  {% endif %}
-                </div>
+              <div class="resume-skill-head">
+                <span>{{ skill.name }}</span>
+                {% if skill.proficiency_label %}<span class="resume-skill-level">{{ skill.proficiency_label }}</span>{% endif %}
+              </div>
+              <div class="resume-skill-bar" role="meter" aria-valuenow="{{ level }}" aria-valuemin="0"
+                aria-valuemax="100" aria-label="{{ skill.name }} proficiency {{ level }} percent">
+                <span class="resume-skill-fill" style="width: {{ level }}%"></span>
               </div>
             </li>
             {% endfor %}
@@ -233,61 +223,44 @@
         {% endif %}
 
         {% if portfolio.languages %}
-        <section>
-          <h2 class="section-heading">Languages</h2>
-          <ul class="unstyled-list">
-            {% for lang in portfolio.languages %}
-            <li>
-              <h3>{{ lang.name }}</h3>
-              <p class="section-label">{{ lang.fluency }}</p>
-            </li>
+        <section class="resume-section" aria-labelledby="languages-title">
+          <h2 id="languages-title">Languages</h2>
+          <ul class="resume-tags">
+            {% for language in portfolio.languages %}
+            <li>{{ language.name }}{% if language.fluency %} · {{ language.fluency }}{% endif %}</li>
             {% endfor %}
           </ul>
         </section>
         {% endif %}
 
-        {% if portfolio.volunteer_experience %}
-        <section>
-          <h2 class="section-heading">Volunteer Experience</h2>
-          {% for vol in portfolio.volunteer_experience %}
-          <section>
-            <h3>
-              {% if vol.url %}
-              {{ vol.position }} at <a href="{{ vol.url }}">{{ vol.organization }}</a>
-              {% else %}
-              {{ vol.position }} at {{ vol.organization }}
-              {% endif %}
-            </h3>
-            {% if vol.start_date and vol.end_date %}
-            <p class="section-label">{{ vol.start_date }} - {{ vol.end_date }}</p>
-            {% endif %}
-            {% if vol.summary %}<p>{{ vol.summary }}</p>{% endif %}
-            {% if vol.highlights %}
-            <ul>
-              {% for highlight in vol.highlights %}<li>{{ highlight }}</li>{% endfor %}
-            </ul>
-            {% endif %}
-          </section>
-          {% endfor %}
+        {% if portfolio.interests %}
+        <section class="resume-section" aria-labelledby="interests-title">
+          <h2 id="interests-title">Interests</h2>
+          <ul class="resume-tags">
+            {% for interest in portfolio.interests %}<li>{{ interest.name }}</li>{% endfor %}
+          </ul>
         </section>
         {% endif %}
 
         {% for memberName, memberValue in extra_fields.items() %}
-        <section>
-          <h2 class="section-heading">{{memberName}}</h2>
+        <section class="resume-section">
+          <h2>{{ memberName }}</h2>
           {% if isinstance(memberValue, list) %}
-          {% for item in memberValue %}
-          <section>
-            <h3>{{ item }}</h3>
-          </section>
-          {% endfor %}
+          <ul class="resume-list">
+            {% for item in memberValue %}<li>{{ item }}</li>{% endfor %}
+          </ul>
           {% endif %}
         </section>
         {% endfor %}
       </aside>
     </div>
-  </div>
-  <script src="js/app.js"></script>
+
+    <footer class="resume-footer">
+      <p>© {{ portfolio.current_year }} {{ portfolio.first_name }}{% if portfolio.middle_name %} {{ portfolio.middle_name }}{% endif %} {{ portfolio.last_name }}.</p>
+      <p><a href="index.html">Portfolio</a> · <a href="resume.pdf" download>Download PDF</a></p>
+    </footer>
+  </main>
+  <script src="js/theme.js" defer></script>
 </body>
 
 </html>

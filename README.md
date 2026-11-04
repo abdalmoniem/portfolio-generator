@@ -26,7 +26,26 @@ The templates are written in HTML and use Jinja syntax to access the data in the
 - `templates/resume_template.html`: This is the main template for the resume. It defines the structure and layout of the resume, and uses Jinja syntax to access the data in the JSON file.
 - `templates/resume_pdf_template.html`: This is the main template for the PDF version of the resume. It defines the structure and layout of the PDF resume, and uses Jinja syntax to access the data in the JSON file.
 - `templates/index_template.html`: This is the main template for the portfolio. It defines the structure and layout of the portfolio, and uses Jinja syntax to access the data in the JSON file.
-- `templates/css/main.css`: This is the stylesheet for the resume and portfolio. It defines the colors, fonts, and layout of the resume and portfolio.
+
+Stylesheets live under `templates/css/`:
+
+- `templates/css/fonts.css`: Self-hosted local font faces (Montserrat, Nunito) served from `templates/fonts/`.
+- `templates/css/tokens.css`: Shared design tokens (colors, spacing, typography, etc.) used across the site.
+- `templates/css/components.css`: Shared primitives used by both web pages (contact chips, link indicator, theme toggle).
+- `templates/css/portfolio.css`: Styles for the portfolio site (`index.html`).
+- `templates/css/resume.css`: Styles for the web resume (`resume.html`).
+- `templates/css/resume_pdf.css`: Styles for the ATS PDF resume only (`resume_pdf.html`).
+- `templates/css/main.css`: Legacy shared stylesheet for the resume and portfolio.
+- `templates/css/html5bp.css`, `templates/css/modern_normalize.css`: Base/normalization styles.
+
+JavaScript lives under `templates/js/`:
+
+- `templates/js/theme.js`: Shared light/dark theme controller (localStorage + prefers-color-scheme) used by `index.html` and `resume.html`.
+- `templates/js/app.js`: Portfolio interactions (nav, filters, replayable reveal/skill animations, floating back-to-top, hero pointer parallax and click particles).
+
+Generated PDFs are `generated/resume.pdf` and `generated/<First> <Last> Resumé.pdf` (accent on the final syllable only). `resume_pdf.html` loads only `css/fonts.css` and `css/resume_pdf.css`, while the web pages additionally load `css/tokens.css` and `css/components.css`.
+
+All fonts, CSS, JavaScript, and images are local to the project. Generation does not fetch any network resources: templates reference only relative paths under `templates/`, and WeasyPrint renders with `media_type="screen"` from the locally generated HTML. The PDF link indicator uses `templates/img/link.svg` so the PDF text stream stays clean for ATS parsing.
 
 To customize the templates, simply edit the HTML and CSS files in the `templates` directory. The changes will be reflected in the generated resume and portfolio.
 
