@@ -486,7 +486,7 @@ def main() -> None:
 
         pdf_output_paths = [
             GENERATED_DIR / "resume.pdf",
-            GENERATED_DIR / f"{portfolio.first_name} {portfolio.last_name} Résumé.pdf",
+            GENERATED_DIR / f"{portfolio.first_name} {portfolio.last_name} Resumé.pdf",
         ]
 
         copy_resources = [
@@ -546,12 +546,16 @@ def main() -> None:
             )
 
         # Convert HTML to PDF with WeasyPrint
+        # Render the PDF source once, then write both output files from that
+        # single rendered document.
+        pdf_document = HTML(
+            filename=str(generated_items[-1].output_path), media_type="screen"
+        ).render()
+
         for pdf_output_path in pdf_output_paths:
             logger.info(f"Generating {pdf_output_path.name} file...")
 
-            HTML(
-                filename=str(generated_items[-1].output_path), media_type="screen"
-            ).write_pdf(str(pdf_output_path))
+            pdf_document.write_pdf(str(pdf_output_path))
 
     except KeyboardInterrupt:
         logger.warning("portfolio generation interrupted!")
