@@ -184,23 +184,87 @@
   "projects": [
     {
       "title": "Hands On Detection",
-      "summary": "Creating steering wheel hands on detection using segmented ADC segments and integrating with autonomous driving and applying gesture detection with which a user can play next/previous song or increase/decrease volume."
+      "summary": "Creating steering wheel hands on detection using segmented ADC segments and integrating with autonomous driving and applying gesture detection with which a user can play next/previous song or increase/decrease volume.",
+      "tools": [
+        "AVR",
+        "STM32",
+        "Vector CANoe",
+        "make",
+        "C",
+        "Embedded C",
+        "Bare Metal",
+        "ADC",
+        "Capacitive Sensing",
+        "Operating Systems",
+        "Algorithms"
+      ]
     },
     {
       "title": "Steering Wheel Light Bands",
-      "summary": "Creating segmented steering wheel light bands and integrating with autonomous driving to indicate various states, show welcome light and display speed value through the light bands"
+      "summary": "Creating segmented steering wheel light bands and integrating with autonomous driving to indicate various states, show welcome light and display speed value through the light bands",
+      "tools": [
+        "AVR",
+        "STM32",
+        "Vector CANoe",
+        "make",
+        "C",
+        "Embedded C",
+        "Bare Metal",
+        "ADC",
+        "Capacitive Sensing",
+        "Operating Systems",
+        "Algorithms"
+      ]
     },
     {
       "title": "Touch Display Based Steering Wheel Switches",
-      "summary": "Creating touch display based steering wheel switches with haptic feedback to show various information for the user such as currently playing song, caller info, cruise control info and more. Users can also interact with these displays to set various settings such as answering calls, changing music or setting cruise control speed."
+      "summary": "Creating touch display based steering wheel switches with haptic feedback to show various information for the user such as currently playing song, caller info, cruise control info and more. Users can also interact with these displays to set various settings such as answering calls, changing music or setting cruise control speed.",
+      "tools": [
+        "AVR",
+        "STM32",
+        "Vector CANoe",
+        "make",
+        "C",
+        "Embedded C",
+        "Bare Metal",
+        "ADC",
+        "Capacitive Sensing",
+        "Touch Screens",
+        "LCD Displays",
+        "Operating Systems",
+        "Algorithms"
+      ]
     },
     {
       "title": "Capacitive Touch Stack with Haptic Feedback",
-      "summary": "Creating in house capacitive touch stacks for use in capacitive touch based steering wheel switches, touch based displays or touchpads. The stack consisted of CAPS, CSBN, TSDS, SLID, TPAD, GDET and SENS modules which are Capacitive Sensing (low level layer which interfaces with the hardware and ADC peripherals), Baselining (baselining read ADC values over a period of time, applying filters and frequency hopping), Touch State Detection System (determining winning buttons in a group based touch steering wheel switches), Slider (detecting slider position in a touch based linear slider sensor with center of mass detection), Touch Pad (detecting multi-finger X, Y positions on a 2D touchpad with multiplexed NxM matrix), Gesture Detection (detecting 2D simple and complex gestures on a touchpad such as tapping, double tapping, one/two finger swipe directions, one/two finger scrolling, zooming in/out and more) and finally SENS which is a controller module for the previous modules that initiates and processes each of the stack’s module in a pre-defined periodic task"
+      "summary": "Creating in house capacitive touch stacks for use in capacitive touch based steering wheel switches, touch based displays or touchpads. The stack consisted of CAPS, CSBN, TSDS, SLID, TPAD, GDET and SENS modules which are Capacitive Sensing (low level layer which interfaces with the hardware and ADC peripherals), Baselining (baselining read ADC values over a period of time, applying filters and frequency hopping), Touch State Detection System (determining winning buttons in a group based touch steering wheel switches), Slider (detecting slider position in a touch based linear slider sensor with center of mass detection), Touch Pad (detecting multi-finger X, Y positions on a 2D touchpad with multiplexed NxM matrix), Gesture Detection (detecting 2D simple and complex gestures on a touchpad such as tapping, double tapping, one/two finger swipe directions, one/two finger scrolling, zooming in/out and more) and finally SENS which is a controller module for the previous modules that initiates and processes each of the stack’s module in a pre-defined periodic task",
+      "tools": [
+        "AVR",
+        "STM32",
+        "make",
+        "C",
+        "Embedded C",
+        "Bare Metal",
+        "ADC",
+        "Capacitive Sensing",
+        "Touch Pads",
+        "Operating Systems",
+        "Algorithms"
+      ]
     },
     {
       "title": "eShifter",
-      "summary": "Creating applications for detecting/inducing transmission states in an electronic shift by wire shifter with priority-based processing for the P/R/N/D buttons and multi-push handling algorithms"
+      "summary": "Creating applications for detecting/inducing transmission states in an electronic shift by wire shifter with priority-based processing for the P/R/N/D buttons and multi-push handling algorithms",
+      "tools": [
+        "AVR",
+        "STM32",
+        "make",
+        "C",
+        "Embedded C",
+        "AUTOSAR",
+        "Operating Systems",
+        "Algorithms"
+      ]
     },
     {
       "title": "Smart Home Automation System",
