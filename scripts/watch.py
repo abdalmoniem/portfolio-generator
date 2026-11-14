@@ -1,3 +1,5 @@
+# ruff: noqa: UP007, UP045, RUF100
+
 """
 Run this script to watch for changes to the portfolio.json file and regenerate
 the portfolio and resume pages when it changes.

@@ -22,7 +22,8 @@
     }
   ],
   "summary": "I’m a Software Engineer with over <b><i>9 years</i></b> of experience in Software Engineering, I specialize in a broad range of areas including Embedded Systems, Linux, Robotics, Android Development, Game Development, Database Administration, System Administration, CI/CD Automation, Diagnostic Systems, Wireless Connectivity Verification, Bluetooth Low Energy, and Zephyr. I thrive in challenging environments, actively collaborating with cross-functional teams to optimize workfows and improve system reliability.",
-  "base_url": "localhost:8000",
+  "base_url": "https://abdalmoniem-alhifnawy.is-a.dev",
+  "base_url_svg_path": "img/globe.svg",
   "social_links": [
     {
       "label": "LinkedIn",
@@ -142,8 +143,8 @@
       "company": "Hive Studio",
       "position": "Game Developer",
       "url": "https://hivestudio.net",
-      "start_date": "<b><i>Dec/2017</i></b>",
-      "end_date": "<b><i>Feb/2018</i></b>",
+      "start_date": "<b><i>Aug/2015</i></b>",
+      "end_date": "<b><i>Mar/2016</i></b>",
       "highlights": [
         "Developing various VR and AR games for various advertising purposes, using Unity3D and C#"
       ]
@@ -152,8 +153,8 @@
       "company": "AL Hadeya For Arabic Software",
       "position": "Android Developer",
       "url": "https://www.hadeya.net/",
-      "start_date": "<b><i>Dec/2017</i></b>",
-      "end_date": "<b><i>Feb/2018</i></b>",
+      "start_date": "<b><i>Feb/2015</i></b>",
+      "end_date": "<b><i>Mar/2015</i></b>",
       "highlights": [
         "Developing Android Apps for various clients, managing SQL databases and creating backend servers using Java2EE and JSP"
       ]

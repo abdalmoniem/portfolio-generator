@@ -1,4 +1,5 @@
-# ruff: noqa: UP045
+# ruff: noqa: UP007, UP045, RUF100
+
 """
 Generate an HTML page from a Jinja template and a JSON data file.
 
@@ -40,9 +41,8 @@ from typing import Optional
 import json5
 from dacite import from_dict
 from jinja2 import Environment, FileSystemLoader, Template
-from weasyprint import HTML
-
 from logging_setup import configure_logging
+from weasyprint import HTML
 
 configure_logging()
 logger = logging.getLogger(__name__)
@@ -275,6 +275,8 @@ class Portfolio:
     contact: list[ContactInfo]
     summary: str
     base_url: str
+    base_url_svg_path: str
+    base_url_svg_data: Optional[str]
     social_links: list[SocialLink]
     work_experience: list[WorkExperience]
     projects: list[Project]
@@ -453,6 +455,12 @@ def main() -> None:
                     ) as svg_file:
                         link.svg_data = svg_file.read()
 
+        if portfolio.base_url_svg_path:
+            with (TEMPLATES_DIR / portfolio.base_url_svg_path).open(
+                encoding="utf-8"
+            ) as svg_file:
+                portfolio.base_url_svg_data = svg_file.read()
+
         extra_fields = {}
 
         for key, value in raw_data.items():
@@ -486,7 +494,7 @@ def main() -> None:
 
         pdf_output_paths = [
             GENERATED_DIR / "resume.pdf",
-            GENERATED_DIR / f"{portfolio.first_name} {portfolio.last_name} Resumé.pdf",
+            GENERATED_DIR / f"{portfolio.first_name}_{portfolio.last_name}_Resumé.pdf",
         ]
 
         copy_resources = [

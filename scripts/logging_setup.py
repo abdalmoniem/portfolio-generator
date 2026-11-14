@@ -1,3 +1,5 @@
+# ruff: noqa: UP007, UP045
+
 """
 Configure Rich logging for portfolio generator scripts.
 
@@ -9,8 +11,9 @@ import copy
 import logging
 import shutil
 import textwrap
+from collections.abc import Iterable
 from datetime import datetime
-from typing import Iterable, Optional, Union, cast
+from typing import Optional, Union, cast
 
 from constants import LOG_LEVEL
 from rich._log_render import FormatTimeCallable, LogRender
@@ -62,7 +65,9 @@ class LogRenderEveryLine(LogRender):
             output.add_column(style="log.time")
 
         if self.show_level:
-            output.add_column(style="log.level", width=self.level_width)
+            output.add_column(
+                style="log.level", width=self.level_width, justify="center"
+            )
 
         output.add_column(ratio=1, style="log.message", overflow="ignore")
 
@@ -127,7 +132,7 @@ class RichHandlerEveryLine(RichHandler):
             show_path=self._log_render.show_path,
             time_format=self._log_render.time_format,
             omit_repeated_times=False,
-            level_width=self._log_render.level_width,
+            level_width=7,  # self._log_render.level_width,
         )
 
     def _wrap_width(self) -> int:

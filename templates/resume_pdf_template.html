@@ -44,6 +44,13 @@
         </a>
       </li>
       {% endfor %}
+      <li>
+        <a href="{{ portfolio.base_url }}" target="_blank" rel="noopener noreferrer"
+          aria-label="{{ portfolio.base_url }}">
+          {% if portfolio.base_url_svg_data %}{{ portfolio.base_url_svg_data | safe }}{% endif %}
+          <span>Portfolio</span>
+        </a>
+      </li>
     </ul>
     {% endif %}
 
